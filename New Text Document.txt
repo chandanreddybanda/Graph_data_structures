@@ -1,0 +1,135 @@
+#include<iostream>
+using namespace std;
+int *S;
+int n;
+struct gn
+{
+	int w;
+	int u;
+	int v;
+}g[10];
+int find(int i)
+{
+	if(S[i]==0)
+	return i;
+	else
+	return find(S[i]);
+}
+void u(int i,int j)
+{
+//	if(S[i]==0)
+//	{
+//		S[find(j)]=i;
+//	}
+//	else
+//	{
+//		S[find(i)]=j;
+//	}
+    if(S[j]==0)
+	{
+		S[j]=i;
+	}
+	else if(S[i]==0)
+	{
+		S[i]=j;
+	}
+	else
+	{
+		S[find(i)]=j;
+	}
+}
+void swap(gn &a,gn &b)
+{
+	gn t=a;
+	a=b;
+	b=t;
+}
+void heapify(gn g[],int le,int i)
+{
+	int l=i;
+	int lc=2*i;
+	int rc=2*i+1;
+	if(lc<le&&g[l].w>g[lc].w)
+	l=lc;
+	if(rc<le&&g[l].w>g[rc].w)
+	l=rc;
+	if(l!=i)
+	{
+		swap(g[i],g[l]);
+		heapify(g,le,l);
+	}
+}
+void heapsort(gn g[])
+{
+	int le=n+1;
+	for(int i=le/2;i>=1;i--)
+	heapify(g,le,i);
+//	for(int i=n-1;i>=0;i--) //for exact sort of all elements
+//	{
+//		swap(a[0],a[i]);
+//		heapify(a,i,0);
+//	}
+}
+int min()
+{
+	heapsort(g);
+	return 1;
+}
+int main()
+{
+	cout<<"Enter no. of edges:";
+	cin>>n;	
+	cout<<"Enter no of vertices:";
+	int v;
+	cin>>v;
+	S=new int[n+1];
+	for(int i=0;i<n;i++)
+	{
+		S[i]=0;
+	}
+    for(int i=1;i<=n;i++)
+    {
+    	cin>>g[i].u;
+    	cin>>g[i].v;
+    	cin>>g[i].w;
+	}
+	int ind=0;int count=0;
+	while(ind<=v)
+	{
+	    int i=min();
+	    if(find(g[i].u)!=find(g[i].v))
+	    {
+	    	count=count+g[i].w;
+	    	u(g[i].u,g[i].v);
+		}
+		g[i].w=1000;
+		ind++;
+	}cout<<"count:"<<count;
+	return 0;
+}
+/*
+5
+1
+7
+1
+2
+6
+2
+6
+5
+6
+4
+2
+2
+4
+2
+3
+4
+3
+3
+1
+3
+5
+3
+8
+*/
